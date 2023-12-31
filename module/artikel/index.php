@@ -47,6 +47,18 @@ $result = $db->query($sql);
     <title>Data Barang</title>
     <link rel="stylesheet" href="../../css/styles.css">
     <style>
+        .container {
+            width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: grid;
+            justify-content: center;
+            border-radius: 20px;
+        }
+
         h2 {
             margin-bottom: 10px;
         }
@@ -123,15 +135,25 @@ $result = $db->query($sql);
             <?php echo FormLibrary::generateTable($result); ?>
         </div>
         <ul class="pagination">
-            <li><a href="#">&laquo;</a></li>
-            <?php for ($i = 1; $i <= $num_page; $i++) {
-                $link = "?page={$i}";
-                if (!empty($q))
-                    $link .= "&q={$q}";
-                $class = ($page == $i ? 'active' : '');
-                echo "<li><a class=\"{$class}\" href=\"{$link}\">{$i}</a></li>";
-            } ?>
-            <li><a href="#">&raquo;</a></li>
+            <?php
+            $prev_page = $page - 1;
+            $next_page = $page + 1;
+            ?>
+
+            <?php if ($page > 1): ?>
+                <li><a href="?page=<?= $prev_page . ($q ? "&q=$q" : ''); ?>">&laquo;</a></li>
+            <?php endif; ?>
+
+            <?php for ($i = 1; $i <= $num_page; $i++): ?>
+                <?php $link = "?page=$i" . ($q ? "&q=$q" : ''); ?>
+                <li><a class="<?= ($page == $i ? 'active' : ''); ?>" href="<?= $link; ?>">
+                        <?= $i; ?>
+                    </a></li>
+            <?php endfor; ?>
+
+            <?php if ($page < $num_page): ?>
+                <li><a href="?page=<?= $next_page . ($q ? "&q=$q" : ''); ?>">&raquo;</a></li>
+            <?php endif; ?>
         </ul>
 
         <?php require('../../template/footer.php'); ?>
